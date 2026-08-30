@@ -318,14 +318,14 @@ def lumaTracking(self):
         xPlot2, yRight2, yLeft2, yUnit2, nPlot2 = selectAxes(self, xAxis_lbl2, yAxis_lbl2)
 
         # self.plot1_LT.setLabel('left', str(yAxis_lbl1), color='black', size=14)
-        self.plot1_LT.setLabel('bottom', str(xAxis_lbl1), color='black', size=14)
-        self.plot1_LT.setLabel('left', f'{yAxis_lbl1} [{yUnit1}]', color='black', size=14) #v1.3.0
+        self.plot1_LT.setLabel('bottom', ft.tr(str(xAxis_lbl1)), color='black', size=14)
+        self.plot1_LT.setLabel('left', f'{ft.tr(str(yAxis_lbl1))} [{yUnit1}]', color='black', size=14) #v1.3.0
         self.plot1_LT.getAxis('bottom').setPen(color=(0, 0, 0))
         self.plot1_LT.getAxis('left').setPen(color=(0, 0, 0))
         self.plot1_LT.addLegend(offset = [1, 0.1]) # background color modified in line 122 and 123 of Versions/3.7/lib/python3.7/site-packages/pyqtgraph/graphicsItems
         # self.plot2_LT.setLabel('left', str(yAxis_lbl2), color='black', size=14)
-        self.plot2_LT.setLabel('bottom', str(xAxis_lbl2), color='black', size=14)
-        self.plot2_LT.setLabel('left', f'{yAxis_lbl2} [{yUnit2}]', color='black', size=14) #v1.3.0
+        self.plot2_LT.setLabel('bottom', ft.tr(str(xAxis_lbl2)), color='black', size=14)
+        self.plot2_LT.setLabel('left', f'{ft.tr(str(yAxis_lbl2))} [{yUnit2}]', color='black', size=14) #v1.3.0
         self.plot2_LT.getAxis('bottom').setPen(color=(0, 0, 0))
         self.plot2_LT.getAxis('left').setPen(color=(0, 0, 0))
         self.plot2_LT.addLegend(offset = [1, 0.1]) # background color modified in line 122 and 123 of Versions/3.7/lib/python3.7/site-packages/pyqtgraph/graphicsItems
@@ -357,7 +357,7 @@ def lumaTracking(self):
 
 def lumaTrackingPlot(label, x, y, name, symbol, color):
     pen = ft.pg.mkPen(color)
-    label.plot(x, y, pen = pen, name = name, symbol = symbol, symbolSize = 7, symbolBrush = (color))
+    label.plot(x, y, pen = pen, name = ft.tr(name), symbol = symbol, symbolSize = 7, symbolBrush = (color))
 
 def saveData(self):
     fileName = ft.QFileDialog.getSaveFileName(self, 'Save tracking data')
@@ -550,11 +550,11 @@ def updateGraphsBtn(self):
         xPlot2, yRight2, yLeft2, yUnit2, nPlot2 = selectAxes(self, xAxis_lbl2, yAxis_lbl2)
 
         # self.plot1_LT.setLabel('left', str(yAxis_lbl1), color='black', size=14)
-        self.plot1_LT.setLabel('bottom', str(xAxis_lbl1), color='black', size=14)
-        self.plot1_LT.setLabel('left', f'{yAxis_lbl1} [{yUnit1}]', color='black', size=14) #v1.3.0
+        self.plot1_LT.setLabel('bottom', ft.tr(str(xAxis_lbl1)), color='black', size=14)
+        self.plot1_LT.setLabel('left', f'{ft.tr(str(yAxis_lbl1))} [{yUnit1}]', color='black', size=14) #v1.3.0
         # self.plot2_LT.setLabel('left', str(yAxis_lbl2), color='black', size=14)
-        self.plot2_LT.setLabel('bottom', str(xAxis_lbl2), color='black', size=14)
-        self.plot2_LT.setLabel('left', f'{yAxis_lbl2} [{yUnit2}]', color='black', size=14) #v1.3.0
+        self.plot2_LT.setLabel('bottom', ft.tr(str(xAxis_lbl2)), color='black', size=14)
+        self.plot2_LT.setLabel('left', f'{ft.tr(str(yAxis_lbl2))} [{yUnit2}]', color='black', size=14) #v1.3.0
 
         if nPlot1 == 1: #added in v1.3.0
             lumaTrackingPlot(self.plot1_LT, xPlot1, yRight1, yAxis_lbl1, 'o', 'b')

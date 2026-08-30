@@ -24,7 +24,14 @@ analysis = Analysis(
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    # Optional packages present in a developer's global environment can be
+    # discovered through TrackPy/Scikit-learn diagnostics. Flame Tracker does
+    # not use them; excluding them keeps release builds deterministic and small.
+    excludes=[
+        'IPython', 'pytest', 'notebook', 'nbformat', 'jedi', 'zmq',
+        'torch', 'torchvision', 'transformers', 'tensorflow',
+        'onnxruntime', 'pyarrow',
+    ],
     noarchive=False,
     optimize=0,
 )

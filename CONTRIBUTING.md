@@ -46,3 +46,10 @@ python -m PyInstaller --noconfirm --clean flameTracker.spec
 Release tags are annotated and use the `v<major>.<minor>.<patch>` format. The
 tag, `VERSION`, application title, README release badge, and GitHub Release must
 agree.
+# Localization
+
+User-facing text should be added to `scripts/localization.py`. Keep canonical
+control values in English and translate only their presentation. When adding a
+combo-box option or tracking action, extend the localization regression tests
+to confirm that switching language does not change the value consumed by the
+analysis code.

@@ -400,11 +400,11 @@ def manualTrackingBox(self):
     self.showLines_MT.setCheckable(True)
     self.showLines_MT.setChecked(True)
 
-    self.menu_MT = self.menu.addMenu('&Tracking options')
+    self.menu_MT = ft.add_menu(self.menu, '&Tracking options')
     self.menu_MT.addAction(self.showLines_MT)
     self.menu_MT.addAction(self.absValBtn_MT)
 
-    flashingLightSub = self.menu_MT.addMenu('Flashing light')
+    flashingLightSub = ft.add_menu(self.menu_MT, 'Flashing light')
     flashingLightSub.addAction(self.lightROI_MT)
     flashingLightSub.addAction(self.lightThresholdsBtn_MT)
 
@@ -537,10 +537,10 @@ def lumaTrackingBox(self):
     self.exportVideo_LT.setCheckable(True)
     self.exportVideo_LT.triggered.connect(self.getFormat_clicked)
 
-    self.menu_LT = self.menu.addMenu('&Tracking options')
+    self.menu_LT = ft.add_menu(self.menu, '&Tracking options')
     self.menu_LT.addAction(showFrameLargeBtn_LT)
 
-    flashingLightSub = self.menu_LT.addMenu('Flashing light')
+    flashingLightSub = ft.add_menu(self.menu_LT, 'Flashing light')
     flashingLightSub.addAction(self.filterLight_LT)
     flashingLightSub.addAction(self.lightROIBtn_LT)
     flashingLightSub.addAction(self.lightThresholdsBtn_LT)
@@ -818,9 +818,9 @@ def RGBTrackingBox(self):
     self.exportVideo_RT.setCheckable(True)
     self.exportVideo_RT.triggered.connect(self.getFormat_clicked)
 
-    self.menu_RT = self.menu.addMenu('&Tracking options')
+    self.menu_RT = ft.add_menu(self.menu, '&Tracking options')
 
-    connectivitySub = self.menu_RT.addMenu('Connectivity (px)')
+    connectivitySub = ft.add_menu(self.menu_RT, 'Connectivity (px)')
     connectivitySub.addAction(connectivity0)
     connectivitySub.addAction(connectivity1)
     self.connectivityGroup = ft.QActionGroup(self)
@@ -828,7 +828,7 @@ def RGBTrackingBox(self):
     self.connectivityGroup.addAction(connectivity1)
     self.connectivityGroup.setExclusive(True)
 
-    flashingLightSub = self.menu_RT.addMenu('Flashing light')
+    flashingLightSub = ft.add_menu(self.menu_RT, 'Flashing light')
     flashingLightSub.addAction(self.filterLight_RT)
     flashingLightSub.addAction(self.lightROI_RT)
     flashingLightSub.addAction(self.lightThresholdsBtn_RT)
@@ -1095,9 +1095,9 @@ def HSVTrackingBox(self):
     self.exportTrackOverlay_HT = ft.QAction('Video tracking overlay')
     self.exportTrackOverlay_HT.setCheckable(True)
 
-    self.menu_HT = self.menu.addMenu('&Tracking options')
+    self.menu_HT = ft.add_menu(self.menu, '&Tracking options')
 
-    connectivitySub = self.menu_HT.addMenu('Connectivity (px)')
+    connectivitySub = ft.add_menu(self.menu_HT, 'Connectivity (px)')
     connectivitySub.addAction(connectivity0)
     connectivitySub.addAction(connectivity1)
     self.connectivityGroup = ft.QActionGroup(self)
@@ -1107,7 +1107,7 @@ def HSVTrackingBox(self):
 
     self.menu_HT.addAction(showFrameLargeBtn_HT)
 
-    flashingLightSub = self.menu_HT.addMenu('Flashing light')
+    flashingLightSub = ft.add_menu(self.menu_HT, 'Flashing light')
     flashingLightSub.addAction(self.filterLight_HT)
     flashingLightSub.addAction(self.lightROIBtn_HT)
     flashingLightSub.addAction(self.lightThresholdsBtn_HT)
@@ -1241,7 +1241,7 @@ def emberTrackingBox(self):
 
     self.analysisGroupBox.setLayout(self.box_layout)
 
-    self.menu_ET = self.menu.addMenu('&Tracking options')
+    self.menu_ET = ft.add_menu(self.menu, '&Tracking options')
 
 
 # def VSBox(self):

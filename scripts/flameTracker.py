@@ -27,6 +27,14 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 from itertools import zip_longest
 
+# Localized widget subclasses translate presentation text while preserving
+# canonical English values used by the existing analysis logic.
+from localization import (
+    CHINESE, ENGLISH, QAction, QCheckBox, QComboBox, QFileDialog, QGroupBox,
+    QLabel, QMessageBox, QPushButton, QRadioButton, RawQAction, add_menu,
+    language, set_language, tr,
+)
+
 import cv2
 import numpy as np
 import csv
@@ -202,19 +210,19 @@ class FlameTrackerWindow(QMainWindow): #QWidget
 
         ## creating the menu bar
         self.menu = self.menuBar()
-        fileMenu = self.menu.addMenu('&File')
+        fileMenu = add_menu(self.menu, '&File')
         fileMenu.addAction(openVideo)
         fileMenu.addAction(openImages)
         fileMenu.addAction(savePar)
         fileMenu.addAction(loadPar)
         fileMenu.addAction(exportVideo)
 
-        measureMenu = self.menu.addMenu('&Measure')
+        measureMenu = add_menu(self.menu, '&Measure')
         measureMenu.addAction(measureScale)
         measureMenu.addAction(refPoint)
         measureMenu.addAction(measureLength)
 
-        trackingMenu = self.menu.addMenu('&Tracking')
+        trackingMenu = add_menu(self.menu, '&Tracking')
         trackingMenu.addAction(selection_MT)
         trackingMenu.addAction(selection_LT)
         trackingMenu.addAction(selection_RT)
@@ -230,7 +238,7 @@ class FlameTrackerWindow(QMainWindow): #QWidget
         # self.trackingGroup.addAction(selection_VS)
         self.trackingGroup.setExclusive(True)
 
-        frameMenu = self.menu.addMenu('&Show')
+        frameMenu = add_menu(self.menu, '&Show')
         frameMenu.addAction(showFrame)
         frameMenu.addAction(self.figSize)
 
@@ -247,7 +255,21 @@ class FlameTrackerWindow(QMainWindow): #QWidget
         help_ET = QAction('Ember tracking', self)
         help_ET.triggered.connect(self.help_ET_clicked)
 
-        helpMenu = self.menu.addMenu("&Help")
+        languageMenu = add_menu(self.menu, "Language")
+        self.languageEnglish = RawQAction("English", self, checkable=True)
+        self.languageChinese = RawQAction("简体中文", self, checkable=True)
+        languageGroup = QActionGroup(self)
+        languageGroup.setExclusive(True)
+        languageGroup.addAction(self.languageEnglish)
+        languageGroup.addAction(self.languageChinese)
+        languageMenu.addAction(self.languageEnglish)
+        languageMenu.addAction(self.languageChinese)
+        self.languageEnglish.setChecked(language() == ENGLISH)
+        self.languageChinese.setChecked(language() == CHINESE)
+        self.languageEnglish.triggered.connect(lambda: set_language(ENGLISH))
+        self.languageChinese.triggered.connect(lambda: set_language(CHINESE))
+
+        helpMenu = add_menu(self.menu, "&Help")
         helpMenu.addAction(help_FT)
         helpMenu.addAction(help_MT)
         helpMenu.addAction(help_LT)
@@ -842,7 +864,7 @@ class FlameTrackerWindow(QMainWindow): #QWidget
             )
 
             dialog = QDialog(self)
-            dialog.setWindowTitle("Measure scale")
+            dialog.setWindowTitle(tr("Measure scale"))
             dialog.setWindowModality(Qt.WindowModality.WindowModal)
 
             instruction = QLabel(
@@ -1478,7 +1500,7 @@ class MyPopup(QWidget):
         mainWin = self
         QWidget.__init__(self2)
 
-        self2.setWindowTitle('Select video format')
+        self2.setWindowTitle(tr('Select video format'))
         grid = QGridLayout()
         # grid.setRowStretch(grid.rowCount(), 1)
         # grid.setColumnStretch(grid.columnCount(), 4)
@@ -1516,7 +1538,7 @@ class vFormatPopup(QWidget):
         mainWin = self
         QWidget.__init__(self3)
 
-        self3.setWindowTitle('Select video format')
+        self3.setWindowTitle(tr('Select video format'))
         grid = QGridLayout()
 
         infoTxt = QLabel('Video codec and format depend on your OS and available packages \n(the best combination may require some trial and error).', self3)

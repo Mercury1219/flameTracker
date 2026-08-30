@@ -313,14 +313,14 @@ def RGBTracking(self):
         xPlot2, yRight2, yLeft2, yUnit2, nPlot2 = selectAxes(self, xAxis_lbl2, yAxis_lbl2)
         
         # self.plot1_RT.setLabel('left', str(yAxis_lbl1), color='black', size=14)
-        self.plot1_RT.setLabel('bottom', str(xAxis_lbl1), color='black', size=14)
-        self.plot1_RT.setLabel('left', f'{yAxis_lbl1} [{yUnit1}]', color='black', size=14) #v1.3.0
+        self.plot1_RT.setLabel('bottom', ft.tr(str(xAxis_lbl1)), color='black', size=14)
+        self.plot1_RT.setLabel('left', f'{ft.tr(str(yAxis_lbl1))} [{yUnit1}]', color='black', size=14) #v1.3.0
         self.plot1_RT.getAxis('bottom').setPen(color=(0, 0, 0))
         self.plot1_RT.getAxis('left').setPen(color=(0, 0, 0))
         self.plot1_RT.addLegend(offset = [1, 0.1])
         # self.plot2_RT.setLabel('left', str(yAxis_lbl2), color='black', size=14)
-        self.plot2_RT.setLabel('bottom', str(xAxis_lbl2), color='black', size=14)
-        self.plot2_RT.setLabel('left', f'{yAxis_lbl2} [{yUnit2}]', color='black', size=14) #v1.3.0
+        self.plot2_RT.setLabel('bottom', ft.tr(str(xAxis_lbl2)), color='black', size=14)
+        self.plot2_RT.setLabel('left', f'{ft.tr(str(yAxis_lbl2))} [{yUnit2}]', color='black', size=14) #v1.3.0
         self.plot2_RT.getAxis('bottom').setPen(color=(0, 0, 0))
         self.plot2_RT.getAxis('left').setPen(color=(0, 0, 0))
         self.plot2_RT.addLegend(offset = [1, 0.1])
@@ -350,7 +350,7 @@ def RGBTracking(self):
 
 def RGBTrackingPlot(label, x, y, name, symbol, color):
     pen = ft.pg.mkPen(color)
-    label.plot(x, y, pen = pen, name = name, symbol = symbol, symbolSize = 7, symbolBrush = (color))
+    label.plot(x, y, pen = pen, name = ft.tr(name), symbol = symbol, symbolSize = 7, symbolBrush = (color))
 
 def colorSlider_released(self):
     frame, frameCrop = ft.checkEditing(self, self.frameNumber)
@@ -664,11 +664,11 @@ def updateGraphsBtn(self):
         xPlot2, yRight2, yLeft2, yUnit2, nPlot2 = selectAxes(self, xAxis_lbl2, yAxis_lbl2)
 
         # self.plot1_RT.setLabel('left', str(yAxis_lbl1), color='black', size=14)
-        self.plot1_RT.setLabel('bottom', str(xAxis_lbl1), color='black', size=14)
-        self.plot1_RT.setLabel('left', f'{yAxis_lbl1} [{yUnit1}]', color='black', size=14) #v1.3.0
+        self.plot1_RT.setLabel('bottom', ft.tr(str(xAxis_lbl1)), color='black', size=14)
+        self.plot1_RT.setLabel('left', f'{ft.tr(str(yAxis_lbl1))} [{yUnit1}]', color='black', size=14) #v1.3.0
         # self.plot2_RT.setLabel('left', str(yAxis_lbl2), color='black', size=14)
-        self.plot2_RT.setLabel('bottom', str(xAxis_lbl2), color='black', size=14)
-        self.plot2_RT.setLabel('left', f'{yAxis_lbl2} [{yUnit2}]', color='black', size=14) #v1.3.0
+        self.plot2_RT.setLabel('bottom', ft.tr(str(xAxis_lbl2)), color='black', size=14)
+        self.plot2_RT.setLabel('left', f'{ft.tr(str(yAxis_lbl2))} [{yUnit2}]', color='black', size=14) #v1.3.0
 
         if nPlot1 == 1: #added in v1.3.0
             RGBTrackingPlot(self.plot1_RT, xPlot1, yRight1, yAxis_lbl1, 'o', 'b')

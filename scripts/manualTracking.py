@@ -234,9 +234,9 @@ def startTracking(self):
 
 
     # self.plot1_MT.setLabel('left', str(yAxis_lbl1), color='black', size=14)
-    self.plot1_MT.setLabel('bottom', str(xAxis_lbl1), color='black', size=14)
-    self.plot1_MT.setLabel('left', f'{yAxis_lbl1} [{yUnit1}]', color='black', size=14)
-    self.lbl2_MT.setLabel('left', f'{yAxis_lbl2} [{yUnit2}]', color='black', size=14)
+    self.plot1_MT.setLabel('bottom', ft.tr(str(xAxis_lbl1)), color='black', size=14)
+    self.plot1_MT.setLabel('left', f'{ft.tr(str(yAxis_lbl1))} [{yUnit1}]', color='black', size=14)
+    self.lbl2_MT.setLabel('left', f'{ft.tr(str(yAxis_lbl2))} [{yUnit2}]', color='black', size=14)
     self.plot1_MT.getAxis('bottom').setPen(color=(0, 0, 0))
     self.plot1_MT.getAxis('left').setPen(color=(0, 0, 0))
     self.plot1_MT.addLegend(offset = [1, 0.1])
@@ -255,7 +255,7 @@ def click(event, x, y, flags, param):
 
 def manualTrackingPlot(label, x, y, lineName, symbol, color):
     pen = ft.pg.mkPen(color)
-    label.plot(x, y, pen = pen, name = lineName, symbol = symbol, symbolSize = 7, symbolBrush = (color))
+    label.plot(x, y, pen = pen, name = ft.tr(lineName), symbol = symbol, symbolSize = 7, symbolBrush = (color))
 
 def absValue(self):
       abs_frame = list()
@@ -390,11 +390,11 @@ def updateGraphsBtn(self):
             xPlot2, yPlot2, yUnit2 = selectAxes(self, xAxis_lbl2, yAxis_lbl2, n)
 
             # self.plot1_MT.setLabel('left', str(yAxis_lbl1), color='black', size=14)
-            self.plot1_MT.setLabel('bottom', str(xAxis_lbl1), color='black', size=14)
-            self.plot1_MT.setLabel('left', f'{yAxis_lbl1} [{yUnit1}]', color='black', size=14)
+            self.plot1_MT.setLabel('bottom', ft.tr(str(xAxis_lbl1)), color='black', size=14)
+            self.plot1_MT.setLabel('left', f'{ft.tr(str(yAxis_lbl1))} [{yUnit1}]', color='black', size=14)
             # self.lbl2_MT.setLabel('left', str(yAxis_lbl2), color='black', size=14)
-            self.lbl2_MT.setLabel('bottom', str(xAxis_lbl2), color='black', size=14)
-            self.lbl2_MT.setLabel('left', f'{yAxis_lbl2} [{yUnit2}]', color='black', size=14)
+            self.lbl2_MT.setLabel('bottom', ft.tr(str(xAxis_lbl2)), color='black', size=14)
+            self.lbl2_MT.setLabel('left', f'{ft.tr(str(yAxis_lbl2))} [{yUnit2}]', color='black', size=14)
             manualTrackingPlot(self.plot1_MT, xPlot1, yPlot1, name, 'o', clr)
             manualTrackingPlot(self.lbl2_MT, xPlot2, yPlot2, name, 'o', clr)
 

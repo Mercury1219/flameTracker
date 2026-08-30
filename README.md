@@ -1,5 +1,17 @@
-# Flame Tracker
+<h1 align="center">Flame Tracker</h1>
+
+<p align="center">A Python desktop application for quantitative flame and bright-object tracking in videos and image sequences.</p>
+
+<p align="center">
+  <a href="https://github.com/Mercury1219/flameTracker/releases"><img alt="Release" src="https://img.shields.io/github/v/release/Mercury1219/flameTracker"></a>
+  <a href="https://github.com/Mercury1219/flameTracker/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Mercury1219/flameTracker/actions/workflows/ci.yml/badge.svg"></a>
+  <img alt="Python" src="https://img.shields.io/badge/Python-3.11%20%7C%203.13-3776AB?logo=python&logoColor=white">
+  <a href="https://github.com/Mercury1219/flameTracker/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/Mercury1219/flameTracker"></a>
+</p>
+
 Flame Tracker is a Python-based video processing application designed for the fire research community. With its Graphical User Interface (GUI), it is possible to edit images and videos to track a flame or a bright object on a frame by frame basis. Flame characteristics such as position, spread rate, length and area can be obtained by isolating a flame from its background with different methods.
+
+> This maintained fork tracks the upstream project at [`combustionTools/flameTracker`](https://github.com/combustionTools/flameTracker). It fixes the Scale workflow by keeping endpoint selection and known-length input in one visible dialog.
 
 Flame Tracker is open source and cross platform, and information about how to use it is available on the Wiki page (https://github.com/combustionTools/flameTracker/wiki).
 
@@ -18,7 +30,7 @@ Stay up to date with new versions and other information! Subscribe here: https:/
 L. Carmignani, Flame Tracker: An image analysis program to measure flame characteristics, SoftwareX, Vol. 15, 2021, https://www.sciencedirect.com/science/article/pii/S2352711021000984?via%3Dihub
 
 # Before you start
-Note: Windows users have the option to donwload the latest release of the executable file of the Flame Tracker (https://github.com/combustionTools/flameTracker/releases), avoiding the need to download the scripts.
+Note: Windows users can download the latest executable from this fork's [Releases](https://github.com/Mercury1219/flameTracker/releases), avoiding the need to install Python or the source dependencies.
 Update: MacOS executable available from v1.3.0
 
 ## 1. Python installation (if needed)
@@ -35,6 +47,28 @@ The packages required to run the code are (they can be installed with pip or ana
 - trackPy (https://pypi.org/project/trackpy/) for v1.4.0 and more recent versions
 
 **Note:** Creating a virtual environment is recommended to make sure you are using the right packages.
+
+Install all runtime dependencies from the repository root with:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+Then launch the application with:
+
+```bash
+cd scripts
+python flameTracker.py
+```
+
+## Scale measurement
+
+1. Open a video or image sequence.
+2. Select **Scale** from the toolbar or **Measure > Scale (px/length)**.
+3. Click the two endpoints of a known length in the displayed frame.
+4. Enter the known length, select its unit, and select **OK**.
+
+The resulting pixels-per-unit value is written to the **Scale px/unit** field.
 
 # Additional information
 For more information about installing and running Flame Tracker (with the script and the release), as well as the use of the software, refer to the Wiki page: https://github.com/combustionTools/flameTracker/wiki.

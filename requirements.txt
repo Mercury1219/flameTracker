@@ -1,5 +1,5 @@
-numpy
-opencv-python
-PyQt6
-pyqtgraph
-trackpy
+numpy==2.5.2
+opencv-python==5.0.0.93
+PyQt6==6.11.0
+pyqtgraph==0.14.0
+trackpy==0.7

@@ -15,6 +15,7 @@ def test_required_release_files_exist():
         'requirements.txt',
         'flameTracker.spec',
         'scripts/flameTracker.py',
+        'scripts/localization.py',
     }
     missing = sorted(
         item for item in required if not (PROJECT_ROOT / item).is_file()

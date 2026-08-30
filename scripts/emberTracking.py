@@ -135,9 +135,9 @@ def detectEmbers(self, frame):
                 self.plot2_ET.setXRange(0, masses.max() * 1.05)
 
             # 5. Set titles and labels for clarity
-            self.plot2_ET.setTitle("Total Intensity Distribution")
-            self.plot2_ET.setLabel('bottom', "Tot Intensity (Area * px intensity)")
-            self.plot2_ET.setLabel('left', "Number of embers")
+            self.plot2_ET.setTitle(ft.tr("Total Intensity Distribution"))
+            self.plot2_ET.setLabel('bottom', ft.tr("Tot Intensity (Area * px intensity)"))
+            self.plot2_ET.setLabel('left', ft.tr("Number of embers"))
            
         except Exception as e:
             self.plot2_ET.clear()
@@ -439,7 +439,7 @@ def emberTracking(self):
 
 def ETTrackingPlot(label, x, y, name, symbol, color):
     pen = ft.pg.mkPen(color)
-    label.plot(x, y, pen = pen, name = name, symbol = symbol, symbolSize = 7, symbolBrush = (color))
+    label.plot(x, y, pen = pen, name = ft.tr(name), symbol = symbol, symbolSize = 7, symbolBrush = (color))
 
 def calculateMetrics(self, tracks_df):
     """Calculates instantaneous velocity and speed and adds them to the DataFrame."""

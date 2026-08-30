@@ -2,6 +2,8 @@
 
 <p align="center">A Python desktop application for quantitative flame and bright-object tracking in videos and image sequences.</p>
 
+<p align="center"><strong>English</strong> | <a href="README.zh-CN.md">简体中文</a></p>
+
 <p align="center">
   <a href="https://github.com/Mercury1219/flameTracker/releases"><img alt="Release" src="https://img.shields.io/github/v/release/Mercury1219/flameTracker"></a>
   <a href="https://github.com/Mercury1219/flameTracker/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Mercury1219/flameTracker/actions/workflows/ci.yml/badge.svg"></a>
@@ -11,7 +13,7 @@
 
 Flame Tracker is a Python-based video processing application designed for the fire research community. With its Graphical User Interface (GUI), it is possible to edit images and videos to track a flame or a bright object on a frame by frame basis. Flame characteristics such as position, spread rate, length and area can be obtained by isolating a flame from its background with different methods.
 
-> This maintained fork tracks the upstream project at [`combustionTools/flameTracker`](https://github.com/combustionTools/flameTracker). It fixes the Scale workflow by keeping endpoint selection and known-length input in one visible dialog.
+> This maintained fork tracks the upstream project at [`combustionTools/flameTracker`](https://github.com/combustionTools/flameTracker). It provides a reliable Scale workflow and live English/Simplified-Chinese interface switching.
 
 Flame Tracker is open source and cross platform, and information about how to use it is available on the Wiki page (https://github.com/combustionTools/flameTracker/wiki).
 
@@ -69,6 +71,14 @@ python flameTracker.py
 4. Enter the known length, select its unit, and select **OK**.
 
 The resulting pixels-per-unit value is written to the **Scale px/unit** field.
+
+## Interface language
+
+Select **Language > English** or **Language > 简体中文** from the menu bar.
+The active window updates immediately, including the selected tracking panel,
+and Flame Tracker remembers the choice for the next launch. Language switching
+changes presentation text only; tracking calculations and exported field names
+retain their stable canonical values.
 
 # Additional information
 For more information about installing and running Flame Tracker (with the script and the release), as well as the use of the software, refer to the Wiki page: https://github.com/combustionTools/flameTracker/wiki.

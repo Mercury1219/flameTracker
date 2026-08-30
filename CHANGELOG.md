@@ -3,7 +3,7 @@
 All notable changes to this fork are documented in this file. Versions follow
 [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.4.2] - 2026-08-30
 
 ### Fixed
 
@@ -21,4 +21,4 @@ All notable changes to this fork are documented in this file. Versions follow
 - Added `VERSION` as the single release-version source.
 - Added reproducible dependency, test, CI, and Windows packaging definitions.
 
-[Unreleased]: https://github.com/Mercury1219/flameTracker/compare/v1.4.1...HEAD
+[1.4.2]: https://github.com/Mercury1219/flameTracker/compare/v1.4.1...v1.4.2

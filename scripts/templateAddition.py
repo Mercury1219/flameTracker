@@ -31,6 +31,7 @@ def initVars(self): # define initial variables
 
 def yourFunction(self, par):
     # The video editing is covered by the Flame Tracker code, here only the independent analysis should be included
+    pass
 
 ########### The following part is for creating the user interface objects at the end of 'boxexGUI_OS.py'. ####
 #######################################################################################################

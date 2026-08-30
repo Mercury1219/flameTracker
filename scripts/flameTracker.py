@@ -45,6 +45,18 @@ import emberTracking as et # v1.4.0
 import boxesGUI_OS as gui
 # import videoStitching as vs
 
+
+def loadVersion():
+    """Load the release version from the repository's single version source."""
+    projectRoot = getattr(
+        sys,
+        '_MEIPASS',
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    )
+    versionPath = os.path.join(projectRoot, 'VERSION')
+    with open(versionPath, encoding='utf-8') as versionFile:
+        return f'v{versionFile.read().strip()}'
+
 #To make sure the resolution is correct also in Windows
 if hasattr(Qt, 'AA_EnableHighDpiScaling'):
     QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
@@ -61,6 +73,45 @@ def initVars(self): # define initial variables
     self.refPoint_ROI = []
     self.trackingMethod = None
 
+
+class ScaleImageLabel(QLabel):
+    """Image label that reports clicks and draws the selected scale segment."""
+
+    pointClicked = pyqtSignal(float, float)
+
+    def __init__(self, pixmap, parent=None):
+        super().__init__(parent)
+        self.basePixmap = pixmap
+        self.points = []
+        self.setPixmap(self.basePixmap)
+        self.setFixedSize(self.basePixmap.size())
+        self.setCursor(Qt.CursorShape.CrossCursor)
+
+    def mousePressEvent(self, event):
+        if event.button() != Qt.MouseButton.LeftButton:
+            return
+
+        point = event.position()
+        if len(self.points) == 2:
+            self.points.clear()
+        self.points.append(QPointF(point.x(), point.y()))
+        self._redraw()
+        self.pointClicked.emit(point.x(), point.y())
+
+    def _redraw(self):
+        marked = self.basePixmap.copy()
+        painter = QPainter(marked)
+        pen = QPen(QColor(255, 0, 0), 3)
+        painter.setPen(pen)
+
+        for point in self.points:
+            painter.drawEllipse(point, 5, 5)
+        if len(self.points) == 2:
+            painter.drawLine(self.points[0], self.points[1])
+
+        painter.end()
+        self.setPixmap(marked)
+
 class FlameTrackerWindow(QMainWindow): #QWidget
     def __init__(self, parent=None):
         super(FlameTrackerWindow, self).__init__(parent)
@@ -74,7 +125,7 @@ class FlameTrackerWindow(QMainWindow): #QWidget
         (at your option) any later version.''')
 
         # Flame Tracker version
-        self.version_FT = 'v1.4.1'
+        self.version_FT = loadVersion()
 
         # creating the toolbar
         toolbar = QToolBar('FT toolbar')
@@ -756,95 +807,115 @@ class FlameTrackerWindow(QMainWindow): #QWidget
             print('Unexpected error:', sys.exc_info())
 
     def measureScaleBtn_clicked(self, text):
-        global clk
-        clk = False # False unless the mouse is clicked
         try:
-            roiOne = int(self.roiOneIn.text())
-            roiTwo = int(self.roiTwoIn.text())
-            roiThree = int(self.roiThreeIn.text())
-            roiFour = int(self.roiFourIn.text())
-
-            points = list()
+            if not hasattr(self, 'frameNumber') or not self.roiThreeIn.text() or not self.roiFourIn.text():
+                QMessageBox.warning(
+                    self,
+                    'Measure scale',
+                    'Open a video or image before measuring the scale.'
+                )
+                return
 
             frame, frameCrop = checkEditing(self, self.frameNumber)
+            if frameCrop is None or frameCrop.size == 0:
+                raise ValueError('The selected frame or ROI is empty.')
 
-            cv2.namedWindow('MeasureScale', cv2.WINDOW_AUTOSIZE)
-            cv2.setMouseCallback('MeasureScale', click)
-            if self.figSize.isChecked() == True:
-                newWidth = int(frameCrop.shape[1] / 2) #original width divided by 2
-                newHeight = int(frameCrop.shape[0] / 2) #original height divided by 2
-                halfFig = cv2.resize(frameCrop, (newWidth, newHeight))
-                cv2.imshow('MeasureScale', halfFig)
-            else:
-                cv2.imshow('MeasureScale', frameCrop)
+            rgbFrame = cv2.cvtColor(frameCrop, cv2.COLOR_BGR2RGB)
+            height, width, channels = rgbFrame.shape
+            bytesPerLine = channels * width
+            sourceImage = QImage(
+                rgbFrame.data,
+                width,
+                height,
+                bytesPerLine,
+                QImage.Format.Format_RGB888
+            ).copy()
 
-            for n in range(2):
-                # wait for the mouse event or 'escape' key to quit
-                while (True):
-                    if clk == True:
-                        clk = False
-                        break
-
-                    if cv2.waitKey(1) == 27: #ord('q')
-                        cv2.destroyAllWindows()
-                        return
-
-                # update each position and frame list for the current click
-                if self.figSize.isChecked() == True:
-                    points.append(xPos * 2)
-                    points.append(yPos * 2)
-                else:
-                    points.append(xPos)
-                    points.append(yPos)
+            screen = QApplication.primaryScreen().availableGeometry()
+            maxWidth = max(400, int(screen.width() * 0.75))
+            maxHeight = max(300, int(screen.height() * 0.65))
+            displayPixmap = QPixmap.fromImage(sourceImage).scaled(
+                maxWidth,
+                maxHeight,
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation
+            )
 
             dialog = QDialog(self)
             dialog.setWindowTitle("Measure scale")
+            dialog.setWindowModality(Qt.WindowModality.WindowModal)
 
+            instruction = QLabel(
+                'Click the two endpoints of a known length in the image. '
+                'A third click starts the selection again.'
+            )
+            imageLabel = ScaleImageLabel(displayPixmap)
+            statusLabel = QLabel('Points selected: 0 / 2')
             length_input = QLineEdit()
+            length_input.setPlaceholderText('Known length')
+            length_input.setValidator(QDoubleValidator(0.0000001, 1000000000.0, 8, dialog))
             unit_selector = QComboBox()
             unit_selector.addItems(["mm", "cm", "m", "in", "ft"])
 
             layout = QVBoxLayout()
+            layout.addWidget(instruction)
+            scrollArea = QScrollArea()
+            scrollArea.setWidget(imageLabel)
+            scrollArea.setWidgetResizable(False)
+            scrollArea.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            layout.addWidget(scrollArea)
+            layout.addWidget(statusLabel)
             row = QHBoxLayout()
-            row.addWidget(QLabel("Length:"))
+            row.addWidget(QLabel("Known length:"))
             row.addWidget(length_input)
             row.addWidget(unit_selector)
             layout.addLayout(row)
 
             buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+            okButton = buttons.button(QDialogButtonBox.StandardButton.Ok)
+            okButton.setEnabled(False)
             layout.addWidget(buttons)
             dialog.setLayout(layout)
+
+            def updateScaleDialog():
+                pointCount = len(imageLabel.points)
+                statusLabel.setText(f'Points selected: {pointCount} / 2')
+                try:
+                    validLength = float(length_input.text()) > 0
+                except ValueError:
+                    validLength = False
+                okButton.setEnabled(pointCount == 2 and validLength)
+
+            imageLabel.pointClicked.connect(lambda x, y: updateScaleDialog())
+            length_input.textChanged.connect(updateScaleDialog)
 
             buttons.accepted.connect(dialog.accept)
             buttons.rejected.connect(dialog.reject)
 
             if dialog.exec():
-                try:
-                    length_val = float(length_input.text())
-                    self.unitScale = unit_selector.currentText()
+                length_val = float(length_input.text())
+                self.unitScale = unit_selector.currentText()
 
-                    length_px = ((points[3]-points[1])**2 + (points[2]-points[0])**2)**0.5
-                    scale = length_px / length_val
-                    scale = np.round(scale, 3)
+                xRatio = width / displayPixmap.width()
+                yRatio = height / displayPixmap.height()
+                firstPoint, secondPoint = imageLabel.points
+                deltaX = (secondPoint.x() - firstPoint.x()) * xRatio
+                deltaY = (secondPoint.y() - firstPoint.y()) * yRatio
+                length_px = (deltaX ** 2 + deltaY ** 2) ** 0.5
+                scale = np.round(length_px / length_val, 3)
 
-                    self.scaleIn.setText(str(scale))
-                    self.measureScaleTxt.setText(f'Scale px/{self.unitScale}:')
-                    self.msgLabel.setText(f'Scale in px/{self.unitScale} successfully measured')
-                except ValueError:
-                    self.msgLabel.setText('Invalid length input.')
+                self.scaleIn.setText(str(scale))
+                self.measureScaleTxt.setText(f'Scale px/{self.unitScale}:')
+                self.msgLabel.setText(f'Scale in px/{self.unitScale} successfully measured')
             else:
                 self.msgLabel.setText('Measurement cancelled.')
-            #### Old code for measuring the scale (changed 7/3/25)
-            # length_mm, done1 = QInputDialog.getText(self, 'Measure scale', 'Measured length in mm:')
-            # length_px = ((points[3]-points[1])**2 + (points[2]-points[0])**2)**0.5
-            # scale = length_px / float(length_mm)
-            # scale = np.round(scale, 3)
-
-            # self.scaleIn.setText(str(scale))
-            # self.msgLabel.setText('Scale succesfully measured')
-            cv2.destroyAllWindows()
-        except:
+        except Exception:
             print('Unexpected error:', sys.exc_info())
+            QMessageBox.critical(
+                self,
+                'Measure scale',
+                'The scale could not be measured. Check that a video or image is open and that the ROI is valid.'
+            )
             self.msgLabel.setText('Something went wrong and the scale was not measured.')
  
     def refPointBtn_clicked(self):
